@@ -10,7 +10,7 @@ var Queue = function() {
   // Implement the methods below
 
   someInstance.enqueue = function(value) {
-    someInstance[top] += 1;
+    someInstance.top += 1;
     storage[someInstance.top] = value;
   };
 
@@ -27,6 +27,7 @@ var Queue = function() {
   };
 
   someInstance.size = function() {
+    return someInstance.top < someInstance.bottom ? 0 : someInstance.top - someInstance.bottom + 1;
   };
 
   return someInstance;
