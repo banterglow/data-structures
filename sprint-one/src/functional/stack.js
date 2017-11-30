@@ -16,7 +16,7 @@ var Stack = function() {
     var result;
     if (someInstance.top >= 0) {
       result = storage[someInstance.top];
-      storage[someInstance.top] = undefined;
+      delete storage[someInstance.top];
       someInstance.top -= 1;
     }
     return result;

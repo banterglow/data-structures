@@ -12,7 +12,7 @@ Stack.prototype.pop = function() {
   var result;
   if (this.top >= 0) {
     result = this.storage[this.top];
-    this.storage[this.top] = undefined;
+    delete this.storage[this.top];
     this.top -= 1;
   }
   return result;

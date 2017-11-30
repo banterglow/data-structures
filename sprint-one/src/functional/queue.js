@@ -19,7 +19,7 @@ var Queue = function() {
     
     if (someInstance.top >= someInstance.bottom) {
       result = storage[someInstance.bottom];
-      storage[someInstance.bottom] = undefined;
+      delete storage[someInstance.bottom];
       someInstance.bottom += 1;
     }
 

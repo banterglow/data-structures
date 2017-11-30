@@ -22,7 +22,7 @@ queueMethods.dequeue = function() {
   
   if (this.top >= this.bottom) {
     result = this.storage[this.bottom];
-    this.storage[this.bottom] = undefined;
+    delete this.storage[this.bottom];
     this.bottom += 1;
   }
 
