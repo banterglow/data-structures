@@ -17,7 +17,6 @@ HashTable.prototype.insert = function(k, v) {
   } else {
     this._storage.get(index).push([k, v]);
   }
-  console.log(this._storage.get(index));
  //will need to implement override.
   // if no array in that AR1
     // use set to create AR2 = []
