@@ -1,75 +1,200 @@
 var BinarySearchTree = function(val) {
+  this.globalDepth = 1;
+  this.depthTracker = 1;
+  this.treePopulation = 1;
+  this.head = new BSTNode(val);
+};
+
+var BSTNode = function(val) {
   this.value = val;
   this.left = null;
   this.right = null;
+  this.rightPop = 0;
+  this.leftPop = 0;
 };
 
-BinarySearchTree.prototype.insert = function(val) {
-  if (val < this.value) {
-    if (this.left === null) {
-      this.left = new BinarySearchTree(val);
+// Global variables for tracking depth of the tree
+
+BinarySearchTree.prototype.insert = function(val, node) { 
+  node = node || this.head;
+  this.depthTracker++;
+
+  //// LEFT TREE ////  
+  if (val < node.value) {
+    node.leftPop++;
+
+    // Empty left node case
+    if (node.left === null) {
+      // dTracker and gDepth updater
+      if (this.depthTracker > this.globalDepth) {
+        this.globalDepth = this.depthTracker;
+      }
+      //// Insert Balance Checker here? ////
+      
+      // Insert new node to left
+      node.left = new BSTNode(val);
+      // global updates
+      this.treePopulation++;
+      this.depthTracker = 1;
+    // Recursion case
     } else {
-      this.left.insert(val);
+      this.insert(val, node.left);
     }
-  } else if (val > this.value) {
-    if (this.right === null) {
-      this.right = new BinarySearchTree(val);
+
+  //// RIGHT TREE ////
+  } else if (val > node.value) {
+    node.rightPop++;
+
+    // Empty right node case
+    if (node.right === null) {
+      // dTracker and gDepth updater
+      if (this.depthTracker > this.globalDepth) {
+        this.globalDepth = this.depthTracker;
+      }
+      //// Insert Balance Checker here? ////
+
+      // Insert new node to right
+      node.right = new BSTNode(val);
+      // global updates
+      this.treePopulation++;
+      this.depthTracker = 1;
+    // Recursion case
     } else {
-      this.right.insert(val);
+      this.insert(val, node.right);
     }
   }
-
-  // if babyval smaller than current val
-    // if currentBST doesn't have left child
-      // set left child to new babyBST
-    // else run insert on left child
-  // if babyval greater than current val
-    // if currentBST doesn't have a right child
-      // set right child to new babyBST
-    // else run insert on left child
 };
 
-BinarySearchTree.prototype.contains = function(target) {
-  if (this.value === target) {
+BinarySearchTree.prototype.contains = function(target, node) {
+  node = node || this.head;  
+
+  //// Target Found ////
+  if (node.value === target) {
     return true;
-  } else if (target < this.value) {
-    if (this.left === null) {
+  //// Target less than current value
+  } else if (target < node.value) {
+    if (node.left === null) {
       return false;
     }
-    return this.left.contains(target);
-  } else if (target > this.value) {
-    if (this.right === null) {
+    // Recurse contains to the left
+    return this.contains(target, node.left);
+
+  //// Target more than current value
+  } else if (target > node.value) {
+    if (node.right === null) {
       return false;
     }
-    return this.right.contains(target);
+    // Recurse contains to the right
+    return this.contains(target, node.right);
   }
-
-  // var node = node || this; // if below doesn't work, use this.
-  // if current === target
-    // return true;
-  // else if current < target
-    // if (this.left === null)
-      // return false
-    // return this.left.contains(target) // this MAY not work
-  // else if current > target
-    // if (this.right === null)
-      // return false
-    // return this.right.contains(target) // again may not work
 };
 
-BinarySearchTree.prototype.depthFirstLog = function(cb) {
-  cb(this.value);
-  if (this.left) {
-    this.left.depthFirstLog(cb);
+BinarySearchTree.prototype.depthFirstLog = function(cb, node) {
+  node = node || this.head;
+
+  cb(node.value);
+  if (node.left) {
+    this.depthFirstLog(cb, node.left);
   }
-  if (this.right) {
-    this.right.depthFirstLog(cb);
+  if (node.right) {
+    this.depthFirstLog(cb, node.right);
   }
-  // if left child exists 
-    // run depthFirstLog on the this.left
-  // if right child exists
-    // run depthFirstLog on this.right
 };
+
+BinarySearchTree.prototype.balanceChecker = function(node) {
+  if (Math.ceil(Math.log2(this.treePopulation)) < this.totalDepth) {
+    this.refresh(node); // will break if not testing with test suite or if head parent 
+  }
+  // totalDepth
+  // treePopulation
+  // balanceChecker will run immediately after a node is inserted.
+  
+
+
+  // it will start on the top node (binarySearchTree)
+  // it will take the value and follow where that would've gone down the tree
+  // each node, it will check for abs(leftpop - rightpop) >= 2
+  // on the first node where that condition isn'
+};
+
+BinarySearchTree.prototype.refresh = function(node) {
+  var treeArray = [];
+  var compileArray = function(value) { treeArray.push(value); };
+  this.depthFirstLog(compileArray);
+  treeArray = treeArray.sort(function(a, b) {
+    return a - b;
+  }); // sort only works for numbers, can fix to sort as we enter them in.
+  
+  var binaryRecompile = function(arr, node) {
+    var middle = Math.floor(arr.length / 2);
+    if (!node) {
+      node = new BinarySearchTree(arr[middle]);
+    } else {
+      node.insert(arr[middle]);
+    }
+    if (arr.length <= 1) {
+      return;
+    } else {
+      arr.splice(middle, 1);
+      binaryRecompile(arr.slice(0, middle), node);
+      if (arr.length !== 1) {
+        binaryRecompile(arr.slice(middle, arr.length), node);
+      }
+      // }
+    }
+    return node;
+  };
+  var newTree = binaryRecompile(treeArray);
+  return newTree;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+BinarySearchTree.prototype.refresh = function() {
+
+};
+
+// BinarySearchTree.prototype.findDepth = function() {
+//   var greatest;
+  
+
+// };
+
+*/
+
+
+
+
+
+// Properties
+// Depth Tracker: Each time the insert function recurses, increments the global tracking variable. 
+  // Also a max depth global variable. Each recursion, compares global tracking to global depth, and replace depth if greater. 
+// Right, left population property
+  // On all nodes. Increments each time it's about to recursively insert on its left or right. 
+
+// Functions
+// Balance Checker
+  // Triggered by the ceil(logbase2 (total nodes)) > total depth.
+  // Checks left population vs. right population. If > 2, then candidate for rebalancing. Calls Refresh. 
+// Refresh
+  // Gathers depth first log into a sorted array of all nodes. 
+  // Rebuilds tree using sorted array, selecting midpoints recursively. 
+
+
+
+
+
 
 /*
  * Complexity: What is the time complexity of the above functions?
