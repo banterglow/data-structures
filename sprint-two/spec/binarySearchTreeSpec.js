@@ -46,6 +46,10 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([4, 3, 5]);
-
+    console.log('hello')
+    binarySearchTree.insert(1);
+    binarySearchTree.insert(2);
+    binarySearchTree.depthFirstLog(func);
+    expect(array).to.eql([3, 2, 1, 5, 4]);
   });
 });

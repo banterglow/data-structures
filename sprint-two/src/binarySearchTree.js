@@ -129,8 +129,10 @@ BinarySearchTree.prototype.refresh = function(node) {
   treeArray = treeArray.sort(function(a, b) { return a - b; }); // sort only works for numbers, can fix to sort as we enter them in.
   
   this.counter++;
-  this.binaryRecompile(treeArray, node);
+  this.treePopulation = 1;
   this.globalDepth = 1;
+  this.depthTracker = 1;
+  this.binaryRecompile(treeArray, node);
 };
 
 BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
@@ -139,6 +141,8 @@ BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
     targetNode.value = arr[middle];
     targetNode.left = null;
     targetNode.right = null;
+    targetNode.rightPop = 0;
+    targetNode.leftPop = 0;
   } else {
     this.insert(arr[middle]);
   }
@@ -149,11 +153,10 @@ BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
     arr.splice(middle, 1);
     this.counter++;
     this.binaryRecompile(arr.slice(0, middle), targetNode);
-    if (arr.length !== 1) {
+    if (arr.length !== 1 && arr.length !== 0) {
       this.counter++;
       this.binaryRecompile(arr.slice(middle, arr.length), targetNode);
     }
-    // }
   }
   return targetNode;
 };
