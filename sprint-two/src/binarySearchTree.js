@@ -75,7 +75,7 @@ BinarySearchTree.prototype.depthFirstLog = function(cb) {
  * Complexity: What is the time complexity of the above functions?
     Insert: best case constant, worst case log
     Contains: best case constant, worst case log
-    DepthFirstLog: always log
+    DepthFirstLog: always linear
  */
 
 
