@@ -3,6 +3,7 @@ var BinarySearchTree = function(val) {
   this.depthTracker = 1;
   this.treePopulation = 1;
   this.head = new BSTNode(val);
+  this.counter = 0;
 };
 
 var BSTNode = function(val) {
@@ -28,13 +29,12 @@ BinarySearchTree.prototype.insert = function(val, node) {
       // dTracker and gDepth updater
       if (this.depthTracker > this.globalDepth) {
         this.globalDepth = this.depthTracker;
-      }
-      //// Insert Balance Checker here? ////
-      
+      }      
       // Insert new node to left
       node.left = new BSTNode(val);
-      // global updates
+      //// Insert Balance Checker here? ////
       this.treePopulation++;
+      this.balanceChecker(this.head);
       this.depthTracker = 1;
     // Recursion case
     } else {
@@ -51,13 +51,14 @@ BinarySearchTree.prototype.insert = function(val, node) {
       if (this.depthTracker > this.globalDepth) {
         this.globalDepth = this.depthTracker;
       }
-      //// Insert Balance Checker here? ////
 
       // Insert new node to right
       node.right = new BSTNode(val);
-      // global updates
+      //// Insert Balance Checker here? ////
       this.treePopulation++;
+      this.balanceChecker(this.head);
       this.depthTracker = 1;
+
     // Recursion case
     } else {
       this.insert(val, node.right);
@@ -102,7 +103,11 @@ BinarySearchTree.prototype.depthFirstLog = function(cb, node) {
 };
 
 BinarySearchTree.prototype.balanceChecker = function(node) {
-  if (Math.ceil(Math.log2(this.treePopulation)) < this.totalDepth) {
+  var trigger = Math.ceil(Math.log2(this.treePopulation + 1));
+  if (trigger < this.globalDepth) {
+    if (this.counter > 0) {
+      this.counter = 0;
+    }
     this.refresh(node); // will break if not testing with test suite or if head parent 
   }
   // totalDepth
@@ -121,33 +126,37 @@ BinarySearchTree.prototype.refresh = function(node) {
   var treeArray = [];
   var compileArray = function(value) { treeArray.push(value); };
   this.depthFirstLog(compileArray);
-  treeArray = treeArray.sort(function(a, b) {
-    return a - b;
-  }); // sort only works for numbers, can fix to sort as we enter them in.
+  treeArray = treeArray.sort(function(a, b) { return a - b; }); // sort only works for numbers, can fix to sort as we enter them in.
   
-  var binaryRecompile = function(arr, node) {
-    var middle = Math.floor(arr.length / 2);
-    if (!node) {
-      node = new BinarySearchTree(arr[middle]);
-    } else {
-      node.insert(arr[middle]);
-    }
-    if (arr.length <= 1) {
-      return;
-    } else {
-      arr.splice(middle, 1);
-      binaryRecompile(arr.slice(0, middle), node);
-      if (arr.length !== 1) {
-        binaryRecompile(arr.slice(middle, arr.length), node);
-      }
-      // }
-    }
-    return node;
-  };
-  var newTree = binaryRecompile(treeArray);
-  return newTree;
+  this.counter++;
+  this.binaryRecompile(treeArray, node);
+  this.globalDepth = 1;
 };
 
+BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
+  var middle = Math.floor(arr.length / 2);
+  if (this.counter === 1) {
+    targetNode.value = arr[middle];
+    targetNode.left = null;
+    targetNode.right = null;
+  } else {
+    this.insert(arr[middle]);
+  }
+
+  if (arr.length <= 1) {
+    return;
+  } else {
+    arr.splice(middle, 1);
+    this.counter++;
+    this.binaryRecompile(arr.slice(0, middle), targetNode);
+    if (arr.length !== 1) {
+      this.counter++;
+      this.binaryRecompile(arr.slice(middle, arr.length), targetNode);
+    }
+    // }
+  }
+  return targetNode;
+};
 
 
 
