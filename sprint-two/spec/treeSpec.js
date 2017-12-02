@@ -41,4 +41,16 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  it('should handle any primitive value type (numbers, strings, booleans, null)', function() {
+    tree.addChild(5);
+    tree.addChild('test');
+    tree.addChild(false);
+    tree.addChild(null);
+    expect(tree.contains(5)).to.equal(true);
+    expect(tree.contains('test')).to.equal(true);
+    expect(tree.contains(false)).to.equal(true);
+    expect(tree.contains(null)).to.equal(true);
+
+  });
+
 });

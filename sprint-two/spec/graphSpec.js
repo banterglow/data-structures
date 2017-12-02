@@ -68,4 +68,15 @@ describe('graph', function() {
     expect(graph.hasEdge(3, 5)).to.equal(true);
     expect(graph.hasEdge(5, 5)).to.equal(true);
   });
+
+  it('should allow the ability to traverse from one node to another connected node', function() {
+    graph.addNode(5);
+    graph.addNode(2);
+    graph.addNode(1);
+    graph.addNode(3);
+    graph.addEdge(5, 2);
+    expect(graph.graph[5].edge[2].val).to.equal(2);
+    expect(graph.graph[5].edge[1]).to.equal(undefined);
+  });
+
 });

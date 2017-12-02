@@ -24,4 +24,11 @@ describe('set', function() {
     expect(set.contains('Mel Gibson')).to.equal(false);
   });
 
+  it('should not store duplicate values', function() {
+    set.add('Andrew Kang');
+    set.add('Albert Wong');
+    set.add('Andrew Kang');
+    expect(_.indexOf(set.storage, 'Andrew Kang')).to.equal(_.lastIndexOf(set.storage, 'Andrew Kang'));
+  });
+
 });
