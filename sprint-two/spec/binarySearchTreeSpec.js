@@ -16,7 +16,10 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
     binarySearchTree.insert(6);
-    expect(binarySearchTree.head.left.right.value).to.equal(3);
+    expect(binarySearchTree.head.value).to.equal(5);
+    expect(binarySearchTree.head.left.value).to.equal(3);
+    expect(binarySearchTree.head.left.left.value).to.equal(2);
+    expect(binarySearchTree.head.right.value).to.equal(7);
     expect(binarySearchTree.head.right.left.value).to.equal(6);
   });
 
@@ -35,7 +38,7 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
     binarySearchTree.depthFirstLog(func);
-    expect(array).to.eql([5, 2, 3, 7]);
+    expect(array).to.eql([3, 2, 5, 7]);
   });
 
   // add rebalacing tests here
@@ -46,7 +49,6 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([4, 3, 5]);
-    console.log('hello');
     array = [];
     binarySearchTree.insert(1);
     binarySearchTree.insert(2);
