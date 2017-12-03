@@ -66,6 +66,47 @@ BinarySearchTree.prototype.insert = function(val, node) {
   }
 };
 
+BinarySearchTree.prototype.cleanInsert = function(val, node) { 
+  this.depthTracker++;
+
+  //// LEFT TREE ////  
+  if (val < node.value) {
+    node.leftPop++;
+
+    // Empty left node case
+    if (node.left === null) {
+      // dTracker and gDepth updater
+      // Insert new node to left
+      node.left = new BSTNode(val);
+      //// Insert Balance Checker here? ////
+      this.treePopulation++;
+      this.depthTracker = 1;
+    // Recursion case
+    } else {
+      this.cleanInsert(val, node.left);
+    }
+
+  //// RIGHT TREE ////
+  } else if (val > node.value) {
+    node.rightPop++;
+
+    // Empty right node case
+    if (node.right === null) {
+      // dTracker and gDepth updater
+
+      // Insert new node to right
+      node.right = new BSTNode(val);
+      //// Insert Balance Checker here? ////
+      this.treePopulation++;
+      this.depthTracker = 1;
+
+    // Recursion case
+    } else {
+      this.cleanInsert(val, node.right);
+    }
+  }
+};
+
 BinarySearchTree.prototype.contains = function(target, node) {
   node = node || this.head;  
 
@@ -144,7 +185,7 @@ BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
     targetNode.rightPop = 0;
     targetNode.leftPop = 0;
   } else {
-    this.insert(arr[middle]);
+    this.cleanInsert(arr[middle], targetNode);
   }
 
   if (arr.length <= 1) {
@@ -158,7 +199,6 @@ BinarySearchTree.prototype.binaryRecompile = function(arr, targetNode) {
       this.binaryRecompile(arr.slice(middle, arr.length), targetNode);
     }
   }
-  return targetNode;
 };
 
 

@@ -39,14 +39,15 @@ describe('binarySearchTree', function() {
   // });
 
   // add rebalacing tests here
-  it('should automatically rebalance if max depth is more than twice the minimum depth', function() {
+  it('should automatically rebalance if total depth is greater than the log of the total population', function() {
     var array = [];
     var func = function(value) { array.push(value); };
     binarySearchTree.insert(4);
     binarySearchTree.insert(3);
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([4, 3, 5]);
-    console.log('hello')
+    console.log('hello');
+    array = [];
     binarySearchTree.insert(1);
     binarySearchTree.insert(2);
     binarySearchTree.depthFirstLog(func);
